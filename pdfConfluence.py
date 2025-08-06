@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 BASE_URL = "https://brmtatlconfluence.banregio.com:8443"
-API_TOKEN = os.getenv("API_TOKEN")  # Lee desde variable de entorno
+API_TOKEN = os.getenv("API_TOKEN")  # Token desde variable de entorno
 
 HTML_FORM = """
 <!doctype html>
@@ -35,10 +35,11 @@ def index():
 
         headers = {
             "X-Atlassian-Token": "no-check",
-            "Authorization": f"Bearer {API_TOKEN}"  # Aquí está la clave
+            "Authorization": f"Bearer {API_TOKEN}"
         }
-        print(f"API_TOKEN = '{API_TOKEN}'")
 
+        print(f"[INFO] Descargando PDF para pageId={page_id}")
+        print(f"[INFO] API_TOKEN presente: {'Sí' if API_TOKEN else 'No'}")
 
         export_url = f"{BASE_URL}/spaces/flyingpdf/pdfpageexport.action?pageId={page_id}"
         response = requests.get(export_url, headers=headers, allow_redirects=False)
@@ -71,8 +72,6 @@ def index():
     return render_template_string(HTML_FORM)
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    print("✅ Aplicación Flask iniciada correctamente")
+    port = int(os.environ.get("PORT", 5000))  # Para Render
+    print("✅ Aplicación Flask iniciada correctamente en puerto", port)
     app.run(host='0.0.0.0', port=port)
-
-
